@@ -67,10 +67,9 @@ function createCards(data) {
         <div class="title"><a href="#" id="story-title">${data.title}</a></div>
         <div class="info">
                     by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
-                        id="story-comments">${data.descendants}</span> <span id="type">${data.type}</span>
+                        id="story-comments">${data.kids ? data.kids.length : 0}</span> <span id="type">${data.type}</span>
         </div>
         <div class="comments">
-                    <a href="" target="_blank">ALL COMMENTS HERE</a>
         </div>
     `
 
@@ -78,8 +77,8 @@ function createCards(data) {
         console.log(div);
         getPostInfos(div.dataset['idPost'])
         divInfos.style.display = 'block'
-
     })
+
 
     return div
 }
@@ -88,17 +87,41 @@ function getPostInfos(idPost) {
     fetch(`https://hacker-news.firebaseio.com/v0/item/${idPost}.json`)
     .then(response => response.json())
     .then(data => {
+     
         divInfos.innerHTML = `
+       
         <div class="title"><a href="#" id="story-title">${data.title}</a></div>
         <div class="info">
                     by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
                         id="story-comments">${data.descendants}</span> <span id="type">${data.type}</span>
         </div>
-        <div class="comment">
-            
+        <div id="comments">
+            <h2>COMMENTS</h2>
         </div>
     `
+
+    getComments(data.kids)
     })
-
-
 }
+
+function getComments(idsComment) {
+    if (!idsComment) {
+        return ""
+    }
+
+    for (let comment of idsComment) {
+        fetch(`https://hacker-news.firebaseio.com/v0/item/${comment}.json`)
+        .then(response => response.json())
+        .then(data => {
+            let cmts = document.querySelector('#comments')
+            let cmt = document.createElement('div')
+            cmt.innerHTML =  data.by +"<br><br>" +data.text
+
+            cmts.append(cmt)
+        })
+    }
+}
+
+document.getElementById('closeBtn').addEventListener('click', () => {
+    console.log(document.getElementById('closeBtn').className)
+})
