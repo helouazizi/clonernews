@@ -16,6 +16,7 @@ body {
     margin: 0;
     padding: 0;
     transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+    position: relative;
 }
 
 header {
@@ -176,4 +177,16 @@ button {
 
 button:hover {
     background: #cc5500;
+}
+
+#postInfos {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 99;
+    background-color: #222;
+    color: #fff;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    display: none;
 }

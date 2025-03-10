@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+let divInfos = document.querySelector('#postInfos')
 let content = document.getElementById('content')
 let id = 9130260
 function loadContent(nbOfCards) {
@@ -74,9 +75,30 @@ function createCards(data) {
     `
 
     div.addEventListener('click', e => {
-        console.log(div.dataset['idPost']);
+        console.log(div);
+        getPostInfos(div.dataset['idPost'])
+        divInfos.style.display = 'block'
+
     })
 
     return div
 }
 
+function getPostInfos(idPost) {
+    fetch(`https://hacker-news.firebaseio.com/v0/item/${idPost}.json`)
+    .then(response => response.json())
+    .then(data => {
+        divInfos.innerHTML = `
+        <div class="title"><a href="#" id="story-title">${data.title}</a></div>
+        <div class="info">
+                    by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
+                        id="story-comments">${data.descendants}</span> <span id="type">${data.type}</span>
+        </div>
+        <div class="comment">
+            
+        </div>
+    `
+    })
+
+
+}
