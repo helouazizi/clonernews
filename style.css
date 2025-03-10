@@ -41,14 +41,14 @@ main {
     margin: auto;
 }
 
-section {
+/* section {
     margin-bottom: 20px;
     background: var(--card-bg-light);
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: background 0.3s ease-in-out;
-}
+} */
 
 #live-updates {
     background: #ffe8d6;
@@ -61,11 +61,11 @@ section {
     gap: 10px;
 }
 
-.post {
+.content {
     padding: 15px;
     border: 1px solid var(--secondary-color);
     border-radius: 8px;
-    background: var(--card-bg-light);
+    /* background: var(--card-bg-light); */
 }
 
 #load-more {
@@ -98,4 +98,81 @@ body.dark-mode #live-updates {
 body.dark-mode .post {
     background: var(--card-bg-dark);
     border-color: var(--secondary-color);
+}
+
+
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 90%;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff6600;
+    margin-bottom: 10px;
+}
+
+.title a {
+    text-decoration: none;
+    color: #ff6600;
+}
+
+.title a:hover {
+    text-decoration: underline;
+}
+
+.info {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.info span {
+    font-weight: bold;
+}
+
+.comments {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.comments a {
+    color: #0073e6;
+    text-decoration: none;
+}
+
+.comments a:hover {
+    text-decoration: underline;
+}
+
+
+.buttons {
+    margin-bottom: 20px;
+}
+
+button {
+    background: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #cc5500;
 }
