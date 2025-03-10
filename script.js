@@ -31,16 +31,12 @@ function loadContent(nbOfCards) {
             break
         }
 
-        // const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
-        // const data = await response.json()
-        // content.append(createCards(data))
-        // console.log(data)
         fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
             .then(response => response.json())
             .then(data => {
                 if (data.type === "comment") {
                     loadContent(1)
-                    return 
+                    return
                 }
                 content.append(createCards(data))
             })
@@ -50,8 +46,6 @@ function loadContent(nbOfCards) {
     }
 
     id--
-
-    // console.log("--------------------------------------------------------");
 }
 
 let scrollFetchData = 1500
@@ -85,7 +79,6 @@ function createCards(data) {
         divInfos.style.display = 'block'
     })
 
-
     return div
 }
 
@@ -95,7 +88,6 @@ function getPostInfos(idPost) {
     .then(data => {
      
         divInfos.innerHTML = `
-       
         <div class="title"><a href="#" id="story-title">${data.title}</a></div>
         <div class="info">
                     by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
@@ -127,7 +119,3 @@ function getComments(idsComment) {
         })
     }
 }
-
-// document.getElementById('closeBtn').addEventListener('click', () => {
-//     console.log(document.getElementById('closeBtn').className)
-// })
