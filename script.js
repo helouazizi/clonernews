@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const toggleDarkMode = document.getElementById("toggle-dark-mode");
     const body = document.body;
-   loadContent(20)
+    loadContent(20)
 
     // Load user's theme preference
     if (localStorage.getItem("theme") === "dark") {
@@ -21,13 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+let content = document.getElementById('content')
 let id = 9130260
 function loadContent(nbOfCards) {
-    let content = document.getElementById('content')
     let count = 0
-
-    for (let i = id; i >= id-20; i--) {
-        console.log(id);
+    for (let i = id; i >= id - 20; i--) {
         if (count === nbOfCards) {
             break
         }
@@ -35,19 +33,24 @@ function loadContent(nbOfCards) {
             .then(response => response.json())
             .then(data => content.append(createCards(data)))
 
+
+        // for (let promise of res) {
+        //     content.append(createCards(promise))
+        // }
+
         id--
         count++
     }
 
     id--
 
-    console.log("--------------------------------------------------------");
+    // console.log("--------------------------------------------------------");
 }
 
 let scrollFetchData = 1500
 
 addEventListener('scroll', e => {
-   
+
     if (scrollY > scrollFetchData) {
         loadContent(20)
         scrollFetchData += 1500
@@ -58,6 +61,7 @@ function createCards(data) {
     const div = document.createElement('div')
     div.className = 'card'
     div.id = 'news-card'
+    div.dataset.idPost = data.id
     div.innerHTML = `
         <div class="title"><a href="#" id="story-title">${data.title}</a></div>
         <div class="info">
@@ -69,31 +73,10 @@ function createCards(data) {
         </div>
     `
 
+    div.addEventListener('click', e => {
+        console.log(div.dataset['idPost']);
+    })
+
     return div
 }
 
-
-// fetch("https://hacker-news.firebaseio.com/v0/item/0.json")
-
-// async function fetchone() {
-//     try {
-//         const response = await fetch(urll);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-//         const data = await response.json();
-
-//         document.getElementById("story-title").textContent = data.title;
-//         document.getElementById("story-title").href = data.url || "#";
-//         document.getElementById("story-author").textContent = data.by;
-//         document.getElementById("story-score").textContent = data.score;
-//         document.getElementById("story-comments").textContent = data.descendants;
-//         document.getElementById("type").textContent = data.type;
-
-//     } catch (error) {
-//         console.error("Error fetching data:", error);
-//         document.getElementById("news-card").innerHTML = "<p>Failed to load story.</p>";
-//     }
-// }
-
-// fetchone();
