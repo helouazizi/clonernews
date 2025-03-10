@@ -3,7 +3,7 @@
     --background-dark: #121212;
     --text-light: #333;
     --text-dark: #e0e0e0;
-    --primary-color: #ff3e00;
+    --primary-color: #742d15;
     --secondary-color: #6c757d;
     --card-bg-light: #ffffff;
     --card-bg-dark: #1e1e1e;
@@ -105,6 +105,7 @@ body.dark-mode .post {
 .card {
     background: #fff;
     padding: 20px;
+    margin: 30px 0;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
