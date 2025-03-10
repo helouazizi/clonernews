@@ -1,1 +1,1 @@
-nodo tkhadmo 3laraskom
+nodo tkhadmo 3la raskom hhhh
