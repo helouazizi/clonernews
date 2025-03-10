@@ -74,32 +74,36 @@ function createCards(data) {
     `
 
     div.addEventListener('click', e => {
-        console.log(div);
         getPostInfos(div.dataset['idPost'])
-        divInfos.style.display = 'block'
+        // divInfos.style.display = 'block'
     })
 
     return div
 }
 
 function getPostInfos(idPost) {
+    document.getElementById('postInfos').classList.remove('hidden')
     fetch(`https://hacker-news.firebaseio.com/v0/item/${idPost}.json`)
-    .then(response => response.json())
-    .then(data => {
-     
-        divInfos.innerHTML = `
-        <div class="title"><a href="#" id="story-title">${data.title}</a></div>
-        <div class="info">
-                    by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
-                        id="story-comments">${data.descendants}</span> <span id="type">${data.type}</span>
-        </div>
-        <div id="comments">
-            <h2>COMMENTS</h2>
-        </div>
-    `
+        .then(response => response.json())
+        .then(data => {
 
-    getComments(data.kids)
-    })
+            divInfos.innerHTML = `
+                <div class="title"><a href="#" id="story-title">${data.title}</a></div>
+                <div class="info">
+                    by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
+                    id="story-comments">${data.descendants}</span> <span id="type">${data.type}</span>
+                </div>
+                <div id="comments">
+                    <h2>COMMENTS</h2>
+                </div>
+                <button id="closeBtn" >close</button>
+
+    `
+            document.getElementById('closeBtn').addEventListener('click', (e) => {
+                document.getElementById('postInfos').classList.add('hidden')
+            })
+            getComments(data.kids)
+        })
 }
 
 function getComments(idsComment) {
@@ -109,13 +113,14 @@ function getComments(idsComment) {
 
     for (let comment of idsComment) {
         fetch(`https://hacker-news.firebaseio.com/v0/item/${comment}.json`)
-        .then(response => response.json())
-        .then(data => {
-            let cmts = document.querySelector('#comments')
-            let cmt = document.createElement('div')
-            cmt.innerHTML =  data.by +"<br><br>" +data.text
+            .then(response => response.json())
+            .then(data => {
+                let cmts = document.querySelector('#comments')
+                let cmt = document.createElement('div')
+                cmt.innerHTML = data.by + "<br><br>" + data.text
 
-            cmts.append(cmt)
-        })
+                cmts.append(cmt)
+            })
     }
 }
+
