@@ -30,14 +30,20 @@ function loadContent(nbOfCards) {
         if (count === nbOfCards) {
             break
         }
+
+        // const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
+        // const data = await response.json()
+        // content.append(createCards(data))
+        // console.log(data)
         fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
             .then(response => response.json())
-            .then(data => content.append(createCards(data)))
-
-
-        // for (let promise of res) {
-        //     content.append(createCards(promise))
-        // }
+            .then(data => {
+                if (data.type === "comment") {
+                    loadContent(1)
+                    return 
+                }
+                content.append(createCards(data))
+            })
 
         id--
         count++
@@ -122,6 +128,6 @@ function getComments(idsComment) {
     }
 }
 
-document.getElementById('closeBtn').addEventListener('click', () => {
-    console.log(document.getElementById('closeBtn').className)
-})
+// document.getElementById('closeBtn').addEventListener('click', () => {
+//     console.log(document.getElementById('closeBtn').className)
+// })
