@@ -1,3 +1,4 @@
+const cartDiv = document.createElement('div')
 let divInfos = document.querySelector('#postInfos')
 let content = document.getElementById('content')
 let scrollFetchData = 1500
@@ -11,13 +12,15 @@ setInterval(() => {
 
 async function getMaxId() {
     let url = `https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty`;
-    
+
     try {
         const response = await fetch(url);
         const maxId = await response.json();
         if (maxId != holderId) {
-            console.log("max" , maxId);
-            console.log("id" , holderId);
+            document.getElementById('notifDiv').classList.remove('hidden')
+            let notifDiv = document.getElementById('notifDiv')
+            notifDiv.textContent = "Data updated , please reload the page !"
+            document.body.appendChild(notifDiv)
             console.log("data updated")
         }
     } catch (error) {
@@ -28,15 +31,14 @@ async function getMaxId() {
 
 async function getMaxIdAfterLoaded() {
     let url = `https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty`;
-    
+
     try {
         const response = await fetch(url);
         const maxId = await response.json();
-        zkikaId = maxId;
+        holderId = maxId;
         id = maxId
-        loadContent(maxId-holderId)
         loadContent(20)
-        return id 
+        return id
     } catch (error) {
         console.error('Error fetching max ID:', error);
         throw error;
@@ -76,7 +78,7 @@ function handleScroll() {
 
 function loadContent(nbOfCards) {
     let count = 0
-    for (let i = id; i >= id - 20; i--) {
+    for (let i = id; i >= id-nbOfCards; i--) {
         if (count === nbOfCards) {
             break
         }
@@ -84,7 +86,7 @@ function loadContent(nbOfCards) {
             .then(response => response.json())
             .then(data => {
                 let status = data.type === 'story' || data.type === 'poll' || data.type === 'job'
-                if (data.type === "comment" || (status && data.dead) || data.title === undefined || (status && data.deleted)) {                    
+                if (data.type === "comment" || (status && data.dead) || data.title === undefined || (status && data.deleted)) {
                     id--
                     loadContent(1)
                     return
@@ -92,8 +94,8 @@ function loadContent(nbOfCards) {
                 id--
                 content.append(createCards(data))
             }).catch((error) => {
-                console.log(Error('error fetch data ', + error));
-            })  
+                console.log(Error('error fetch data ', + error, "in :", id));
+            })
 
         count++
     }
@@ -110,21 +112,24 @@ function createCards(data) {
     div.id = 'news-card'
     div.dataset.idPost = data.id
     div.innerHTML = `
-    <div class="title"><span>${data.title}</span></div>
-    <div class="info">
-    by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
-    id="story-comments">${data.kids ? data.kids.length : 0}</span> | type: <span id="type">${data.type}</span>
-    </div> | created at: <span>${new Date(data.time*1000)}</span>
-    <div class="comments">
-    </div>
+        <div class="title"><a href="#" id="story-title">${data.title}</a></div>
+        <div class="info">
+                    by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
+                        id="story-comments">${data.kids ? data.kids.length : 0}</span> | type: <span id="type">${data.type}</span>
+        </div>
+        <div class="comments">
+        </div>
     `
-    console.log(data.time);
-    
+
     div.addEventListener('click', e => {
         getPostInfos(div.dataset['idPost'])
     })
+
     return div
 }
+
+
+
 
 function getPostInfos(idPost) {
     document.getElementById('postInfos').classList.remove('hidden')
@@ -138,6 +143,9 @@ function getPostInfos(idPost) {
         by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
         id="story-comments">${data.descendants}</span> | type: <span id="type">${data.type}</span>
         </div>
+        <div id="pollsopt">
+            <h3>options</h3>
+        </div>
         <div id="comments">
         <h2>COMMENTS</h2>
         </div>
@@ -147,6 +155,7 @@ function getPostInfos(idPost) {
             document.getElementById('closeBtn').addEventListener('click', (e) => {
                 document.getElementById('postInfos').classList.add('hidden')
             })
+            getPollsData(data.parts)
             getComments(data.kids)
         })
 }
@@ -170,4 +179,21 @@ function getComments(idsComment) {
     }
 }
 
-
+function getPollsData(idPoll) {
+    if (!idPoll) {
+        return ""
+    }
+    
+    for (let options of idPoll) {
+        fetch(`https://hacker-news.firebaseio.com/v0/item/${options}.json`)
+        .then(response => response.json())
+        .then(data => {
+                let pollsopt = document.querySelector('#pollsopt')
+                let pollOpt = document.createElement('div')
+                if (!pollOpt.deleted) {
+                    pollOpt.innerHTML = data.by + "<br></br>" + data.text + "<br> score:" + data.score
+                }
+                pollsopt.append(pollOpt)
+            })
+    }
+}
