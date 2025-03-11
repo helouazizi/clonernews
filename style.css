@@ -188,6 +188,8 @@ button:hover {
     color: #fff;
     transform: translate(-50%, -50%);
     padding: 30px;
+    height: 80%;
+    overflow: auto;
 }
 
 #comments {
@@ -197,15 +199,6 @@ button:hover {
 #comments>div {
     background-color: #999;
     margin: 10px 0;
-}
-
-.closeBtn {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    color: red;
-    margin-bottom: 30px;
-    cursor: pointer;
 }
 
 .hidden {

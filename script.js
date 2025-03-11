@@ -40,7 +40,9 @@ function loadContent(nbOfCards) {
                     return
                 }
                 content.append(createCards(data))
-            })
+            }).catch((error) => {
+                console.log(Error('error fetch data ', + error));
+            })  
 
         id--
         count++
