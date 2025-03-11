@@ -1,1 +1,0 @@
-nodo tkhadmo 3la raskom hhhh hgjhjhjh hjhjh jhjhjh 
