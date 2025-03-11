@@ -43,10 +43,8 @@ async function getMaxId() {
 
 function fetchDataScroll() {
     if (scrollY > scrollFetchData) {
-        console.log(scrollFetchData)
-        loadData(10);
         scrollFetchData = scrollY + 1000;
-        document.body.style.background = 'red'
+        loadData(10);
     }   
 }
 
