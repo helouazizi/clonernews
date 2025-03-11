@@ -1,4 +1,3 @@
-// const cartDiv = document.createElement('div')
 const divInfos = document.getElementById('postInfos')
 const content = document.getElementById('content')
 const notifDiv = document.getElementById('notifDiv')
