@@ -63,10 +63,28 @@ document.addEventListener("DOMContentLoaded", () => {
             toggleDarkMode.textContent = "🌙";
         }
     });
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', opDebounce(handleScroll , 500 , true));
 });
 
+function opDebounce(func, delay, leading = false) {
+    let timer
+    return function (...args) {
+        if (!leading) {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                func(...args)
+            }, delay)
+        } else {
+            if (timer === undefined) {
+                func(...args)
+            }
+            timer = setTimeout(() => {
+                timer = undefined
+            } , delay)
+        }
 
+    }
+}
 
 
 function handleScroll() {
@@ -95,8 +113,7 @@ function loadContent(nbOfCards) {
                 content.append(createCards(data))
             }).catch((error) => {
                 console.log(Error('error fetch data ', + error, "in :", id));
-            })
-
+            })            
         count++
     }
     id--
@@ -116,6 +133,7 @@ function createCards(data) {
         <div class="info">
                     by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
                         id="story-comments">${data.kids ? data.kids.length : 0}</span> | type: <span id="type">${data.type}</span>
+                        | created at : ${new Date(data.time * 1000)}
         </div>
         <div class="comments">
         </div>
