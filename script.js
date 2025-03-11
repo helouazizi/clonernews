@@ -2,9 +2,8 @@ const divInfos = document.getElementById('postInfos')
 const content = document.getElementById('content')
 const notifDiv = document.getElementById('notifDiv')
 const urlMaxItem = 'https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty'
-
-let scrollFetchData = 1500
 let dataIds = []
+let scrollFetchData = 1500
 let id = 0
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -72,7 +71,6 @@ function loadData(nbOfCards) {
                     return
                 }
                 id--
-                console.log(data.id)
                 dataIds.push(data.id)
                 content.append(createCards(data))
             }).catch((error) => {
@@ -110,24 +108,35 @@ function getPostInfos(idPost) {
     fetch(`https://hacker-news.firebaseio.com/v0/item/${idPost}.json`)
         .then(response => response.json())
         .then(data => {
-            divInfos.innerHTML = `
+            let simplePost = `
         <button id="closeBtn" >close</button>
         <div class="title"><a href="#" id="story-title">${data.title}</a></div>
         <div class="info">
         by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
         id="story-comments">${data.kids ? data.kids.length : 0}</span> | type: <span id="type">${data.type}</span>
         </div>
-        <div id="pollsopt">
-            <h3>options</h3>
-        </div>
-        <div id="comments">
-        <h2>COMMENTS</h2>
-        </div>
         `
+            let commentPart = `
+            <div id="comments">
+            <h2>COMMENTS</h2>
+            </div>
+            `
+
+            let pollPart = `
+                <div id="pollsopt">
+                <h2>Options</h2>
+                </div>
+            `
+
+            if (data.type === 'poll') {
+                divInfos.innerHTML = simplePost + "<br>" + pollPart + "<br>" + commentPart
+            } else {
+                divInfos.innerHTML = simplePost + "<br>" + commentPart
+            }
+
             document.getElementById('closeBtn').addEventListener('click', () => {
                 divInfos.classList.add('hidden')
             })
-
             getPollsData(data.parts)
             getComments(data.kids)
         })
@@ -166,6 +175,7 @@ function getComments(idsComment) {
                 if (!data.deleted) {
                     cmt.innerHTML = data.by + "<br><br>" + data.text
                     cmts.append(cmt)
+
                 }
             })
     }
