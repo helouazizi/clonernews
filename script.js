@@ -89,6 +89,7 @@ function getPostInfos(idPost) {
         .then(response => response.json())
         .then(data => {
             divInfos.innerHTML = `
+                     <button id="closeBtn" >close</button>
                 <div class="title"><a href="#" id="story-title">${data.title}</a></div>
                 <div class="info">
                     by <span id="story-author">${data.by}</span> | Score: <span id="story-score">${data.score}</span> | Comments: <span
@@ -97,7 +98,7 @@ function getPostInfos(idPost) {
                 <div id="comments">
                     <h2>COMMENTS</h2>
                 </div>
-                <button id="closeBtn" >close</button>
+       
 
     `
             document.getElementById('closeBtn').addEventListener('click', (e) => {
