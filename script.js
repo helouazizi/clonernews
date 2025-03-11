@@ -4,6 +4,7 @@ const notifDiv = document.getElementById('notifDiv')
 const urlMaxItem = 'https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty'
 
 let scrollFetchData = 1500
+let dataIds = []
 let id = 0
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -45,7 +46,7 @@ function fetchDataScroll() {
     if (scrollY > scrollFetchData) {
         scrollFetchData = scrollY + 1000;
         loadData(10);
-    }   
+    }
 }
 
 function Debounce(func, delay) {
@@ -64,12 +65,15 @@ function loadData(nbOfCards) {
             .then(response => response.json())
             .then(data => {
                 let status = data.type === 'story' || data.type === 'poll' || data.type === 'job'
-                if (data.type === "comment" || (status && data.dead) || data.title === undefined || (status && data.deleted)) {
+                if (data.type === "comment" || (status && data.dead) || data.title === undefined || (status && data.deleted) ||
+                    dataIds.includes(data.ids)) {
                     id--
                     loadData(1)
                     return
                 }
                 id--
+                console.log(data.id)
+                dataIds.push(data.id)
                 content.append(createCards(data))
             }).catch((error) => {
                 console.log(Error('error fetch data ', + error, "in :", id));
