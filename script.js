@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
 async function getMaxIdAfterLoaded() {
     try {
         const response = await fetch(urlMaxItem);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
         const maxId = await response.json();
         id = maxId
         loadData(20)
@@ -33,6 +36,9 @@ setInterval(() => {
 async function getMaxId() {
     try {
         const response = await fetch(urlMaxItem);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
         const maxId = await response.json();
         if (maxId != id) {
             notifDiv.classList.remove('hidden')
@@ -62,7 +68,13 @@ function Debounce(func, delay) {
 function loadData(nbOfCards) {
     for (let i = 0; i < nbOfCards; i++) {
         fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                return response.json()
+            })
             .then(data => {
                 let status = data.type === 'story' || data.type === 'poll' || data.type === 'job'
                 if (data.type === "comment" || (status && data.dead) || data.title === undefined || (status && data.deleted) ||
@@ -72,7 +84,6 @@ function loadData(nbOfCards) {
                     return
                 }
                 id--
-                console.log(data.id)
                 dataIds.push(data.id)
                 content.append(createCards(data))
             }).catch((error) => {
@@ -108,7 +119,13 @@ function createCards(data) {
 function getPostInfos(idPost) {
     divInfos.classList.remove('hidden')
     fetch(`https://hacker-news.firebaseio.com/v0/item/${idPost}.json`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            return response.json()
+        })
         .then(data => {
             divInfos.innerHTML = `
         <button id="closeBtn" >close</button>
@@ -130,7 +147,7 @@ function getPostInfos(idPost) {
 
             getPollsData(data.parts)
             getComments(data.kids)
-        })
+        }).catch(error => console.log(error))
 }
 
 function getPollsData(idPoll) {
@@ -141,14 +158,20 @@ function getPollsData(idPoll) {
     let pollsOpt = document.querySelector('#pollsopt')
     for (let options of idPoll) {
         fetch(`https://hacker-news.firebaseio.com/v0/item/${options}.json`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                return response.json()
+            })
             .then(data => {
                 let pollOpt = document.createElement('div')
                 if (!data.deleted) {
                     pollOpt.innerHTML = data.by + "<br></br>" + data.text + "<br> score:" + data.score
                     pollsOpt.append(pollOpt)
                 }
-            })
+            }).catch(error => console.log(error))
     }
 }
 
@@ -159,7 +182,13 @@ function getComments(idsComment) {
 
     for (let comment of idsComment) {
         fetch(`https://hacker-news.firebaseio.com/v0/item/${comment}.json`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                return response.json()
+            })
             .then(data => {
                 let cmts = document.querySelector('#comments')
                 let cmt = document.createElement('div')
@@ -167,6 +196,6 @@ function getComments(idsComment) {
                     cmt.innerHTML = data.by + "<br><br>" + data.text
                     cmts.append(cmt)
                 }
-            })
+            }).catch(error => console.log(error))
     }
 }
