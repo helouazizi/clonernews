@@ -144,11 +144,10 @@ function getPollsData(idPoll) {
             .then(response => response.json())
             .then(data => {
                 let pollOpt = document.createElement('div')
-                if (!pollOpt.deleted) {
+                if (!data.deleted) {
                     pollOpt.innerHTML = data.by + "<br></br>" + data.text + "<br> score:" + data.score
-                    return
+                    pollsOpt.append(pollOpt)
                 }
-                pollsOpt.append(pollOpt)
             })
     }
 }
@@ -164,11 +163,10 @@ function getComments(idsComment) {
             .then(data => {
                 let cmts = document.querySelector('#comments')
                 let cmt = document.createElement('div')
-                if (!cmt.deleted) {
+                if (!data.deleted) {
                     cmt.innerHTML = data.by + "<br><br>" + data.text
-                    return
+                    cmts.append(cmt)
                 }
-                cmts.append(cmt)
             })
     }
 }
