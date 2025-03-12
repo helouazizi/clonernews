@@ -5,7 +5,7 @@ const urlMaxItem = 'https://hacker-news.firebaseio.com/v0/maxitem.json?print=pre
 let dataIds = []
 let scrollFetchData = 1500
 let id = 0
-
+////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
     getMaxIdAfterLoaded()
     let fetchDataScrollDebounce = Debounce(fetchDataScroll, 1000)
