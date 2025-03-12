@@ -72,7 +72,7 @@ function loadData(nbOfCards) {
                     throw new Error(`Response status: ${response.status}`);
                 }
 
-                response.json
+                return response.json()
             })
             .then(data => {
                 let status = data.type === 'story' || data.type === 'poll' || data.type === 'job'
@@ -83,6 +83,7 @@ function loadData(nbOfCards) {
                     return
                 }
                 id--
+                console.log(data.id);
                 dataIds.push(data.id)
                 content.append(createCards(data))
             }).catch((error) => {
@@ -122,7 +123,7 @@ function getPostInfos(idPost) {
                 throw new Error(`Response status: ${response.status}`);
             }
 
-            response.json
+            return response.json()
         })
         .then(data => {
             let simplePost = `
@@ -171,7 +172,7 @@ function getPollsData(idPoll) {
                     throw new Error(`Response status: ${response.status}`);
                 }
 
-                response.json
+                return response.json()
             })
             .then(data => {
                 let pollOpt = document.createElement('div')
@@ -195,7 +196,7 @@ function getComments(idsComment) {
                     throw new Error(`Response status: ${response.status}`);
                 }
 
-                response.json
+                return response.json()
             })
             .then(data => {
                 let cmts = document.querySelector('#comments')
