@@ -83,7 +83,6 @@ function loadData(nbOfCards) {
                     return
                 }
                 id--
-                console.log(data.id);
                 dataIds.push(data.id)
                 content.append(createCards(data))
             }).catch((error) => {
